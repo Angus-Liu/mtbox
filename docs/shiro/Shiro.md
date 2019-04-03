@@ -109,7 +109,7 @@ Shiro 在自己的设计中体现了这些概念。通过搭配对软件开发�
     `SessionDAO` 代表 `SessionManager` 执行 `Session` 持久性（CRUD）操作。这允许将任何数据存储插入会话管理基础结构。
 - **CacheManager**（[org.apache.shiro.cache.CacheManager](http://shiro.apache.org/static/current/apidocs/org/apache/shiro/cache/CacheManager.html)）
   `CacheManager` 负责创建和管理其他 `Shiro` 组件使用的 `Cache` 实例生命周期。由于 Shiro 可以访问许多后端数据源以进行身份验证，授权和会话管理，因此缓存一直是框架中极其重要的架构特性，其可以在使用这些数据源时提高性能。任何现代开源的或企业缓存产品都可以插入 Shiro，以提供快速有效的用户体验。
-- **Cryptography **（[org.apache.shiro.crypto.*](http://shiro.apache.org/static/current/apidocs/org/apache/shiro/crypto/package-summary.html)）
+- **Cryptography **（[org.apache.shiro.crypto.\*](http://shiro.apache.org/static/current/apidocs/org/apache/shiro/crypto/package-summary.html)）
   加密机制是企业安全框架的自然补充。Shiro的 `crypto` 软件包包含了易于使用和理解的密码、哈希（亦称摘要）和不同编解码器的实现。该软件包中的所有类都经过精心设计，易于使用且易于理解。使用 Java 原生加密支持的人都知道，它就像种很难被驯服的动物。Shiro 的 `crypto` API 简化了复杂的 Java 机制，使普通人易于使用。
 - **Realms**（[org.apache.shiro.realm.Realm](http://shiro.apache.org/static/current/apidocs/org/apache/shiro/realm/Realm.html)）
   如上所述，Realm 充当 Shiro 与应用程序安全数据之间的“桥接”或“连接器”。当需要与安全相关的数据（如用户帐户）进行实际交互以执行身份验证（登录）和授权（访问控制）时，Shiro 会从一个或多个为应用程序配置的 Realm 中查找这些内容。你可以根据需要配置任意多个 Realm（通常每个数据源一个），Shiro 将根据身份验证和授权的需要与它们进行协调。
