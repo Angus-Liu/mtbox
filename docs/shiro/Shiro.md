@@ -327,4 +327,4 @@ currentUser.logout(); //removes all identifying information and invalidates thei
 
 
 
-> 注：本文自豪地借助“Google”和“有道”进行翻译，如果发现不通顺，请想他们提 issue 😀
+> 注：本文自豪地借助“Google”和“有道”进行翻译，如果发现不通顺，请向他们提 issue 😀
