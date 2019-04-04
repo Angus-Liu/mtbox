@@ -324,3 +324,7 @@ currentUser.logout(); //removes all identifying information and invalidates thei
 当准备好了解更多详细信息时，你肯定希望阅读[身份验证指南](http://shiro.apache.org/java-authentication-guide.html)和[授权指南](http://shiro.apache.org/java-authorization-guide.html)。然后可以转到其他[文档](http://shiro.apache.org/documentation.html)，特别是[参考手册](http://shiro.apache.org/reference.html)，可以回答你的任何其他问题。或许你也想加入用户[邮件列表](http://shiro.apache.org/mailing-lists.html)——你会发现我们有一个很好的社区，人们愿意尽可能地提供帮助。
 
 感谢你的关注。希望你能喜欢上 Apache Shiro！
+
+
+
+> 注：本文自豪地借助“Google”和“有道”进行翻译，如果发现不通顺，请想他们提 issue 😀
