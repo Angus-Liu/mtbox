@@ -325,6 +325,184 @@ currentUser.logout(); //removes all identifying information and invalidates thei
 
 感谢你的关注。希望你能喜欢上 Apache Shiro！
 
+## # 将 Apache Shiro 集成到 SpringBoot 应用程序中
 
+> [Integrating Apache Shiro into Spring-Boot Applications](https://shiro.apache.org/spring-boot.html)
 
-> 注：本文自豪地借助“Google”和“有道”进行翻译，如果发现不通顺，请向他们提 issue 😀
+Shiro 的 SpringBoot 集成方式是将 Shiro 集成到基于 Spring 的应用程序中的最简单方法，对于更一般的 Spring 框架集成，可以采用[注解](https://shiro.apache.org/spring-framework.html)或 [XML](https://shiro.apache.org/spring-xml.html)。
+
+### 独立应用程序
+
+在你的应用程序类路径中包含 Shiro Spring starter 依赖项（推荐使用 Apache Maven 或 Gradle 等工具来管理）。
+
+```
+// Apache Maven
+<dependency>
+    <groupId>org.apache.shiro</groupId>
+    <artifactId>shiro-spring-boot-starter</artifactId>
+    <version>1.4.1-SNAPSHOT</version>
+</dependency>
+
+// Gradle
+compile 'org.apache.shiro:shiro-spring-boot-starter:1.4.1-SNAPSHOT'
+```
+
+剩下的唯一事情是配置一个 [Realm](https://shiro.apache.org/realm.html)：
+
+```java
+@Bean
+public Realm realm() {
+  ...
+}
+```
+
+设置 Shiro 最简单的方法是使 SecurityUtils.* 方法在所有情况下都能工作，也就是让 `SecurityManager` bean成为一个静态单例。请勿在 Web 应用程序中执行此操作——请参阅下面的 [Web 应用程序](https://shiro.apache.org/spring-boot.html#Spring-WebApplications)部分。
+
+```java
+@Autowired
+private SecurityManager securityManager;
+    
+ @PostConstruct
+ private void initStaticSecurityManager() {
+     SecurityUtils.setSecurityManager(securityManager);
+ }
+```
+
+就是这样，现在你可以使用以下方式获取当前 `Subject` :
+
+```java
+SecurityUtils.getSubject();
+```
+
+您可以在 [Github 样例](https://github.com/apache/shiro/tree/master/samples/spring-boot)中看到完整的示例。
+
+### Web 应用程序
+
+Shiro 对 Spring Web 应用程序提供了一流的支持。在 Web 应用程序中，所有可通过 Shiro 访问的 Web 请求都必须通过一个主 Shiro 过滤器。这个过滤器本身非常强大，它允许基于任何 URL 路径表达式执行临时自定义过滤器链。
+
+首先，在你的应用程序类路径中包含 Shiro Spring web starter 依赖项（推荐使用Apache Maven 或 Gradle 之类的工具来管理）。
+
+```
+// Apache Maven
+<dependency>
+    <groupId>org.apache.shiro</groupId>
+    <artifactId>shiro-spring-boot-web-starter</artifactId>
+    <version>1.4.1-SNAPSHOT</version>
+</dependency>
+
+// Gradle
+compile 'org.apache.shiro:shiro-spring-boot-web-starter:1.4.1-SNAPSHOT'
+```
+
+提供Realm实现：
+
+```java
+@Bean
+public Realm realm() {
+  ...
+}
+```
+
+最后是 `ShiroFilterChainDefinition`，它将把任何特定于应用程序的路径映射到给定的过滤器，以便允许不同路径进行不同级别的访问。
+
+```java
+@Bean
+public ShiroFilterChainDefinition shiroFilterChainDefinition() {
+    DefaultShiroFilterChainDefinition chainDefinition = new DefaultShiroFilterChainDefinition();
+    
+    // logged in users with the 'admin' role
+    chainDefinition.addPathDefinition("/admin/**", "authc, roles[admin]");
+    
+    // logged in users with the 'document:read' permission
+    chainDefinition.addPathDefinition("/docs/**", "authc, perms[document:read]");
+    
+    // all other paths require a logged in user
+    chainDefinition.addPathDefinition("/**", "authc");
+    return chainDefinition;
+}
+```
+
+如果你使用的是 Shiro 的注解，请参阅下面的[注解](https://shiro.apache.org/spring-boot.html#Spring-annotations-web)部分。
+
+您可以在 [Github 样例](https://github.com/apache/shiro/tree/master/samples/spring-boot-web)中看到完整的示例。
+
+### 启用 Shiro 注解
+
+在独立应用程序和 Web 应用程序中，你可能需要使用 Shiro 的注解进行安全校验（例如 `@RequiresRoles`、`@RequiresPermissions` 等），在上面列出的启动方法中，这些注解都会自动启用。
+
+只需对你的方法进行注解，就可以使用它们：
+
+```java
+@RequiresPermissions("document:read")
+public void readDocument() {
+    ...
+}
+```
+
+**注解和 Web 应用程序**
+
+Shiro 的注解完全支持在 `@Controller` 类中使用，例如：
+
+```java
+@Controller
+public class AccountInfoController {
+
+    @RequiresRoles("admin")
+    @RequestMapping("/admin/config")
+    public String adminConfig(Model model) {
+        return "view";
+    }
+}
+```
+
+为此， `ShiroFilterChainDefinition` bean 中至少需要有一个定义，要么将所有路径配置为可通过 anno（匿名）过滤器访问，要么设置一个过滤器处于 permissive（许可）模式，例如：authcBasic[permissive]。
+
+```java
+@Bean
+public ShiroFilterChainDefinition shiroFilterChainDefinition() {
+    DefaultShiroFilterChainDefinition chainDefinition = new DefaultShiroFilterChainDefinition();
+    chainDefinition.addPathDefinition("/**", "anon"); // all paths are managed via annotations
+    
+    // or allow basic authentication, but NOT require it.
+    // chainDefinition.addPathDefinition("/**", "authcBasic[permissive]"); 
+    return chainDefinition;
+}
+```
+
+### 缓存
+
+启用缓存就像提供 [CacheManager](http://shiro.apache.org/caching.html) bean 一样简单：
+
+```java
+@Bean
+protected CacheManager cacheManager() {
+    return new MemoryConstrainedCacheManager();
+}
+```
+
+### 配置属性
+
+| 键                                                | 默认值       | 描述                                                     |
+| :------------------------------------------------ | :----------- | :------------------------------------------------------- |
+| shiro.enabled                                     | `true`       | 启用 Shiro 的 Spring 模块                                |
+| shiro.web.enabled                                 | `true`       | 启用 Shiro 的 Spring Web 模块                            |
+| shiro.annotations.enabled                         | `true`       | 为 Shiro 的注解启用 Spring 支持                          |
+| shiro.sessionManager.deleteInvalidSessions        | `true`       | 从会话存储中删除无效会话                                 |
+| shiro.sessionManager.sessionIdCookieEnabled       | `true`       | 为 cookie 启用 session ID，以进行会话跟踪                |
+| shiro.sessionManager.sessionIdUrlRewritingEnabled | `true`       | 启用 sessionURL 重写支持                                 |
+| shiro.userNativeSessionManager                    | `false`      | 如果启用，Shiro 将管理 HTTP session 而不是容器           |
+| shiro.sessionManager.cookie.name                  | `JSESSIONID` | session cookie 名称                                      |
+| shiro.sessionManager.cookie.maxAge                | `-1`         | session cookie 最大生存期                                |
+| shiro.sessionManager.cookie.domain                | `null`       | session cookie 域                                        |
+| shiro.sessionManager.cookie.path`                 | `null`       | session cookie 路径                                      |
+| shiro.sessionManager.cookie.secure                | `false`      | session cookie 安全标志                                  |
+| shiro.rememberMeManager.cookie.name               | `rememberMe` | RememberMe  cookie 名称                                  |
+| shiro.rememberMeManager.cookie.maxAge             | one year     | RememberMe cookie 最大生存期                             |
+| shiro.rememberMeManager.cookie.domain             | `null`       | RememberMe cookie域名                                    |
+| shiro.rememberMeManager.cookie.path               | `null`       | RememberMe cookie路径                                    |
+| shiro.rememberMeManager.cookie.secure             | `false`      | RememberMe cookie安全标志                                |
+| shiro.loginUrl                                    | `/login.jsp` | 未经身份验证的用户重定向到登录页面时使用的 Login URL     |
+| shiro.successUrl                                  | `/`          | 用户登录后的默认页面（如果在当前会话中无法找到替代页面） |
+| shiro.unauthorizedUrl                             | `null`       | 未经授权的用户将被重定向到的页面（403 页面）             |
+
+> 免责声明：本文自豪地借助“Google”和“有道”进行翻译，如果发现不通顺，请向他们提 issue 😀
