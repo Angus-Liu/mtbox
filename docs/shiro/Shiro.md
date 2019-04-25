@@ -506,3 +506,9 @@ protected CacheManager cacheManager() {
 | shiro.unauthorizedUrl                             | `null`       | 未经授权的用户将被重定向到的页面（403 页面）             |
 
 > 免责声明：本文自豪地借助“Google”和“有道”进行翻译，如果发现不通顺，请向他们提 issue 😀
+
+## # 其他参考资料
+
+> [Shiro用starter方式优雅整合到SpringBoot中](https://segmentfault.com/a/1190000014479154)
+>
+> [教你 Shiro 整合 SpringBoot，避开各种坑](https://juejin.im/post/5ac78b31f265da237411387e)
