@@ -30,12 +30,13 @@
 
 |  |      Ⅰ      |               Ⅱ               |    Ⅲ    |                  Ⅳ                  |    Ⅴ    |    Ⅵ    |
 |   :---:  |  -----------  |  ----------------------------  |  -------  |  ----------------------------------  |  ------  |  -------  |
-|   基础   | [:coffee: Java](./docs/Java.md) | [:globe_with_meridians: JavaWEB](./docs/JavaWEB.md) | [:warning:  JVM](./docs/JVM.md) | [:building_construction: 设计模式](./docs/设计模式.md) | [:straight_ruler: 数据结构](./docs/数据结构.md) | [:triangular_ruler: 算法](./docs/算法.md) |
-| 后端 | [:leaves: Spring](./docs/spring/Spring.md) | ⚙️ [SpringBoot](./docs/springboot) |🚫 [Shiro](./docs/shiro/Shiro.md) | [🐰 RabbitMQ](./docs/RabbitMQ.md) | [🚀 RocketMQ](./docs/RocketMQ.md) |🐦 [MyBatis](./docs/MyBatis.md) |
-| 存储 | [:floppy_disk: 数据库](./docs/数据库.md) | [:dolphin: MySQL](./docs/MySQL.md) | [:hourglass: 缓存](./docs/缓存.md) | [:hash: Redis](./docs/Redis.md) | [:mag: ElasticSearch](./docs/ElasticSearch.md) |  |
-| 系统 | [:computer: 操作系统](./docs/操作系统.md) | [:penguin: Linux](./docs/Linux.md) |  |  |  |  |
-| 网络 | [:cloud: 计算机网络](./docs/计算机网络.md) |  |  |  |  |  |
-| 前端 | [:v: Vue](./docs/Vue.md) | [:six: ES6](./docs/ES6.md) |  | | | |
+| 算法 | 📏 数据结构 | 📐 [算法](./docs/Algorithm) |  |  |  |  |
+| 基础 | ☕️ [Java](./docs/Java) | ⚠️ [ JVM](./docs/Java/JVM.md) | 🏗 [设计模式](./docs/Design-Pattern/设计模式.md) |  |  |  |
+| 框架 | 🍃 [Spring](./docs/Java/Spring/Spring.md) | ⚙️ [SpringBoot](./docs/Java/Spring/SpringBoot) |🚫 [Shiro](./docs/shiro/Shiro.md) |  |  |      |
+| 存储 | 💾 [数据库](./docs/Database/数据库.md) | 🐬 [MySQL](./docs/Database/MySQL.md) | 🗃 [缓存](./docs/Cache/Cache.md) | ⚡️ [Redis](./docs/Database/Redis.md) | 🔍 [ElasticSearch](./docs/Java/Elasticsearch/Spring-Data-Elasticsearch-zh.md) |  |
+| 系统 | 💻 [操作系统](./docs/OS/操作系统.md) | 🐧 [Linux](./docs/OS/Linux.md) |  |  |  |  |
+| 网络 | 🌐 [计算机网络](./docs/Network/Network.md) |  |  |  |  |  |
+| 前端 | 6️⃣ ES6 | ✌️Vue |  | | | |
 
 ## License
 
